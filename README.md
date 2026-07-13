@@ -24,7 +24,6 @@ A sleek, browser-based AI image generator powered by Hugging Face's Inference Pr
 
 <img width="1201" height="883" alt="image" src="https://github.com/user-attachments/assets/175e5490-f7ac-421e-abee-6218aaeea249" />
 
-```
 
 ---
 
