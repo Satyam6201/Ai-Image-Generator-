@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conjure — AI Image Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="ambient" aria-hidden="true"></div>
+
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="logo-wrapper">
+          <div class="logo"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div class="brand">
+            <h1>Conjure</h1>
+            <p class="tagline">Describe it. Watch it develop.</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="settings-btn" title="API Settings" aria-haspopup="dialog">
+            <i class="fa-solid fa-key"></i>
+          </button>
+          <button class="icon-btn theme-toggle" title="Toggle theme">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Settings popover -->
+      <div class="settings-panel" id="settings-panel" role="dialog" aria-label="API settings">
+        <div class="settings-panel-header">
+          <h3><i class="fa-solid fa-key"></i> Hugging Face API Key</h3>
+          <button class="icon-btn small" id="settings-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <p class="settings-note">
+          Stored only in your browser (localStorage) — never in your code, never sent anywhere but Hugging Face.
+          Get a free key at <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noopener">huggingface.co/settings/tokens</a>.
+        </p>
+        <div class="key-input-row">
+          <input type="password" id="api-key-input" placeholder="hf_••••••••••••••••••••" autocomplete="off" spellcheck="false">
+          <button class="icon-btn small" id="toggle-key-visibility" title="Show/hide key" type="button">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+        <div class="settings-panel-actions">
+          <button class="ghost-btn" id="clear-key-btn" type="button">Clear</button>
+          <button class="primary-btn small" id="save-key-btn" type="button">Save key</button>
+        </div>
+        <p class="key-status" id="key-status"></p>
+      </div>
+
+      <div class="main-content">
+        <form action="#" class="prompt-form" id="prompt-form">
+          <div class="prompt-container">
+            <textarea class="prompt-input" placeholder="Describe your imagination in detail..." spellcheck="false" required></textarea>
+            <button type="button" class="prompt-btn" title="Get random prompt">
+              <i class="fa-solid fa-dice"></i>
+            </button>
+          </div>
+
+          <!-- Style presets -->
+          <div class="preset-row" id="preset-row">
+            <span class="preset-label">Style</span>
+            <div class="preset-chips" id="preset-chips">
+              <button type="button" class="chip active" data-style="">None</button>
+              <button type="button" class="chip" data-style="cinematic lighting, ultra detailed, film still">Cinematic</button>
+              <button type="button" class="chip" data-style="anime style, vibrant colors, studio ghibli inspired">Anime</button>
+              <button type="button" class="chip" data-style="photorealistic, 8k, sharp focus, natural lighting">Photoreal</button>
+              <button type="button" class="chip" data-style="watercolor painting, soft edges, paper texture">Watercolor</button>
+              <button type="button" class="chip" data-style="cyberpunk, neon, futuristic, high contrast">Cyberpunk</button>
+            </div>
+          </div>
+
+          <!-- Advanced (negative prompt + seed) -->
+          <details class="advanced-panel">
+            <summary>Advanced options</summary>
+            <div class="advanced-grid">
+              <div class="field">
+                <label for="negative-prompt">Negative prompt</label>
+                <input type="text" id="negative-prompt" placeholder="blurry, low quality, watermark, text...">
+              </div>
+              <div class="field">
+                <label for="seed-input">Seed</label>
+                <div class="seed-row">
+                  <input type="number" id="seed-input" placeholder="Random">
+                  <button type="button" class="icon-btn small" id="random-seed-btn" title="Randomize seed">
+                    <i class="fa-solid fa-shuffle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <div class="prompt-actions">
+            <div class="select-wrapper">
+              <select class="custom-select" id="model-select" required>
+                <option value="black-forest-labs/FLUX.1-dev" selected>FLUX.1-dev</option>
+                <option value="black-forest-labs/FLUX.1-schnell">FLUX.1-schnell</option>
+                <option value="stabilityai/stable-diffusion-xl-base-1.0">Stable Diffusion XL</option>
+                <option value="runwayml/stable-diffusion-v1-5">Stable Diffusion v1.5</option>
+                <option value="stabilityai/stable-diffusion-3-medium-diffusers">Stable Diffusion 3</option>
+              </select>
+            </div>
+            <div class="select-wrapper">
+              <select class="custom-select" id="count-select" required>
+                <option value="1" selected>1 Image</option>
+                <option value="2">2 Images</option>
+                <option value="3">3 Images</option>
+                <option value="4">4 Images</option>
+              </select>
+            </div>
+            <div class="select-wrapper">
+              <select class="custom-select" id="ratio-select" required>
+                <option value="1/1" selected>Square (1:1)</option>
+                <option value="16/9">Landscape (16:9)</option>
+                <option value="9/16">Portrait (9:16)</option>
+              </select>
+            </div>
+            <button type="submit" class="generate-btn" id="generate-btn">
+              <i class="fa-solid fa-wand-sparkles"></i>
+              <span>Generate</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Prompt history -->
+        <div class="history-row" id="history-row" hidden>
+          <span class="history-label"><i class="fa-solid fa-clock-rotate-left"></i> Recent</span>
+          <div class="history-chips" id="history-chips"></div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="gallery-grid" id="gallery-grid">
+          <div class="empty-state" id="empty-state">
+            <i class="fa-solid fa-image"></i>
+            <p>Your creations will appear here</p>
+            <span>Pick a style, write a prompt, and hit generate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lightbox-img" src="" alt="Generated image preview">
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
