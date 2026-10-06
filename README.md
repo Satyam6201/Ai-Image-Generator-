@@ -53,7 +53,7 @@ A sleek, browser-based AI image generator powered by Hugging Face's Inference Pr
 | Styling | CSS3 (custom properties, no framework) |
 | Logic | Vanilla JavaScript (ES6+, no build step) |
 | Icons | [Font Awesome 6](https://fontawesome.com/) |
-| Fonts | [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) + [Inter](https://fonts.google.com/specimen/Inter) (Google Fonts) |
+| Fonts | [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk), [Inter](https://fonts.google.com/specimen/Inter), [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) (Google Fonts) |
 | AI Provider | [Hugging Face Inference Providers](https://huggingface.co/docs/inference-providers/index) |
 | Hosting | [Vercel](https://vercel.com/) |
 
@@ -121,6 +121,15 @@ You're ready to generate images!
    - If a generation fails, click **Retry** on that card — no need to regenerate the whole batch
 7. **Reuse past prompts** — click any chip under "Recent" to load a previous prompt back into the input.
 8. **Switch themes** — click the 🌙/☀️ icon to toggle light/dark mode.
+
+---
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+| :--- | :--- |
+| <kbd>Ctrl</kbd> + <kbd>Enter</kbd> / <kbd>Cmd</kbd> + <kbd>Enter</kbd> | Submit and trigger image generation from the prompt box |
+| <kbd>Escape</kbd> | Close the fullscreen Lightbox preview |
 
 ---
 
